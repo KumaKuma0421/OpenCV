@@ -13,11 +13,23 @@ $context2 = Get-Content -Path $template2 -Encoding UTF8
 
 $template3 = ".\packages.config"
 
+$result = ".\result.md"
+$url = "https://github.com/opencv/opencv/blob/master/samples/cpp/"
+
 $excludes = @("asift", "epipolar_lines", "essential_mat_reconstr", "stitching_detailed")
 
 $target = "C:\Users\User01\source\Archives\opencv-master\samples\cpp"
 $fileList = Get-ChildItem -Path $target -Filter "*.cpp" |
             Where-Object { $excludes -notcontains $_.BaseName }
+
+# resultÇÃçÏê¨
+New-Item -ItemType File -Path $result | Out-Null
+Add-Content "# OpenCV samples"     -Path $result -Encoding UTF8 | Out-Null
+Add-Content ""                     -Path $result -Encoding UTF8 | Out-Null
+Add-Content "## Information"       -Path $result -Encoding UTF8 | Out-Null
+Add-Content ""                     -Path $result -Encoding UTF8 | Out-Null
+Add-Content "|Title|FileName/URL|" -Path $result -Encoding UTF8 | Out-Null
+Add-Content "|-----|------------|" -Path $result -Encoding UTF8 | Out-Null
 
 foreach ($file in $fileList) {
     if ($file.Attributes -eq "Directory") {
@@ -70,5 +82,9 @@ foreach ($file in $fileList) {
 
             Add-Content $row -Path $newFile2 -Encoding UTF8 | Out-Null
         }
+
+        # result.mdÇ…í«â¡
+        $resultRow = "|" + $file.BaseName + "|[" + $file.Name + "](" + $url + $file.Name + ")|" 
+        Add-Content $resultRow -Path $result -Encoding UTF8 | Out-Null
     }
 }

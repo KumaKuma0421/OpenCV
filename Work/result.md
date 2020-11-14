@@ -1,4 +1,4 @@
-# OpenCV samples
+﻿# OpenCV samples
 
 ## Information
 
