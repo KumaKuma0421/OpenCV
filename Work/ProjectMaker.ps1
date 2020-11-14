@@ -13,25 +13,31 @@ $context2 = Get-Content -Path $template2 -Encoding UTF8
 
 $template3 = ".\packages.config"
 
+$excludes = @("asift", "epipolar_lines", "essential_mat_reconstr", "stitching_detailed")
+
 $target = "C:\Users\User01\source\Archives\opencv-master\samples\cpp"
-$fileList = Get-ChildItem -Path $target -Filter "*.cpp"
+$fileList = Get-ChildItem -Path $target -Filter "*.cpp" |
+            Where-Object { $excludes -notcontains $_.BaseName }
 
 foreach ($file in $fileList) {
     if ($file.Attributes -eq "Directory") {
         # ignore
     } else {
+        # 展開先のフォルダ名
+        $destination = "..\" + $file.BaseName
+
         # ディレクトリの作成
-        New-Item -ItemType Directory -Path $file.BaseName | Out-Null
+        New-Item -ItemType Directory -Path $destination | Out-Null
 
         # ソースファイルのコピー
         $source = $target + "\" + $file.Name
-        Copy-Item -Path $source -Destination $file.BaseName
+        Copy-Item -Path $source -Destination $destination
         
         # パッケージ設定ファイルのコピー
-        Copy-Item -Path $template3 -Destination $file.BaseName
+        Copy-Item -Path $template3 -Destination $destination
 
         # ファイル1の作成
-        $newFile1 = $file.BaseName + "\" + $file.BaseName + ".vcxproj"
+        $newFile1 = $destination + "\" + $file.BaseName + ".vcxproj"
         New-Item -ItemType File -Path $newFile1 | Out-Null
 
         # テンプレート1の内容を変更
@@ -53,7 +59,7 @@ foreach ($file in $fileList) {
         }
         
         # ファイル2の作成
-        $newFile2 = $file.BaseName + "\" + $file.BaseName + ".vcxproj.filters"
+        $newFile2 = $destination + "\" + $file.BaseName + ".vcxproj.filters"
         New-Item -ItemType File -Path $newFile2 | Out-Null
 
         # テンプレート2の内容
