@@ -1,21 +1,76 @@
-﻿// Project2.cpp : このファイルには 'main' 関数が含まれています。プログラム実行の開始と終了がそこで行われます。
-//
+﻿// ----------------------------------------------------------------------------
+// Project2.cpp
+// ----------------------------------------------------------------------------
 
 #include "pch.h"
-#include <iostream>
 
-int main()
+int main(int argc, char** argv)
 {
-    std::cout << "Hello World!\n";
+	cv::Mat frame;
+	std::cout << "Opening camera..." << std::endl;
+	cv::VideoCapture capture(0); // open the first camera
+	if (!capture.isOpened())
+	{
+		std::cerr << "ERROR: Can't initialize camera capture" << std::endl;
+		return 1;
+	}
+
+	std::cout << "Frame width: " << capture.get(cv::CAP_PROP_FRAME_WIDTH) << std::endl;
+	std::cout << "     height: " << capture.get(cv::CAP_PROP_FRAME_HEIGHT) << std::endl;
+	std::cout << "Capturing FPS: " << capture.get(cv::CAP_PROP_FPS) << std::endl;
+
+	std::cout << std::endl << "Press 'ESC' to quit, 'space' to toggle frame processing" << std::endl;
+	std::cout << std::endl << "Start grabbing..." << std::endl;
+
+	size_t nFrames = 0;
+	bool enableProcessing = false;
+	int64 t0 = cv::getTickCount();
+	int64 processingTime = 0;
+	for (;;)
+	{
+		capture >> frame; // read the next frame from camera
+		if (frame.empty())
+		{
+			std::cerr << "ERROR: Can't grab camera frame." << std::endl;
+			break;
+		}
+
+		nFrames++;
+		if (nFrames % 10 == 0)
+		{
+			const int N = 10;
+			int64 t1 = cv::getTickCount();
+			std::cout << "Frames captured: " << cv::format("%5lld", (long long int)nFrames)
+				      << "    Average FPS: " << cv::format("%9.1f", (double)cv::getTickFrequency() * N / (t1 - t0))
+				      << "    Average time per frame: " << cv::format("%9.2f ms", (double)(t1 - t0) * 1000.0f / (N * cv::getTickFrequency()))
+				      << "    Average processing time: " << cv::format("%9.2f ms", (double)(processingTime) * 1000.0f / (N * cv::getTickFrequency()))
+				      << std::endl;
+			t0 = t1;
+			processingTime = 0;
+		}
+
+		if (!enableProcessing)
+		{
+			imshow("Frame", frame);
+		}
+		else
+		{
+			int64 tp0 = cv::getTickCount();
+			cv::Mat processed;
+			cv::Canny(frame, processed, 400, 1000, 5);
+			processingTime += cv::getTickCount() - tp0;
+			cv::imshow("Frame", processed);
+		}
+
+		int key = cv::waitKey(1);
+		if (key == 27/*ESC*/) break;
+		if (key == 32/*SPACE*/)
+		{
+			enableProcessing = !enableProcessing;
+			std::cout << "Enable frame processing ('space' key): " << enableProcessing << std::endl;
+		}
+	}
+
+	std::cout << "Number of captured frames: " << nFrames << std::endl;
+	return nFrames > 0 ? 0 : 1;
 }
-
-// プログラムの実行: Ctrl + F5 または [デバッグ] > [デバッグなしで開始] メニュー
-// プログラムのデバッグ: F5 または [デバッグ] > [デバッグの開始] メニュー
-
-// 作業を開始するためのヒント: 
-//    1. ソリューション エクスプローラー ウィンドウを使用してファイルを追加/管理します 
-//   2. チーム エクスプローラー ウィンドウを使用してソース管理に接続します
-//   3. 出力ウィンドウを使用して、ビルド出力とその他のメッセージを表示します
-//   4. エラー一覧ウィンドウを使用してエラーを表示します
-//   5. [プロジェクト] > [新しい項目の追加] と移動して新しいコード ファイルを作成するか、[プロジェクト] > [既存の項目の追加] と移動して既存のコード ファイルをプロジェクトに追加します
-//   6. 後ほどこのプロジェクトを再び開く場合、[ファイル] > [開く] > [プロジェクト] と移動して .sln ファイルを選択します

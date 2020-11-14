@@ -1,21 +1,37 @@
-﻿// Project1.cpp : このファイルには 'main' 関数が含まれています。プログラム実行の開始と終了がそこで行われます。
-//
+﻿// ----------------------------------------------------------------------------
+// Project1.cpp
+// ----------------------------------------------------------------------------
 
 #include "pch.h"
-#include <iostream>
 
-int main()
+int main(int atgc, char** argv)
 {
-    std::cout << "Hello World!\n";
+	cv::Mat frame;
+	cv::VideoCapture cap;
+	int deviceID = 0;             // 0 = open default camera
+	int apiID = cv::CAP_ANY;      // 0 = autodetect default API
+								  // open selected camera using selected API
+	cap.open(deviceID, apiID);
+	if (!cap.isOpened())
+	{
+		std::cerr << "ERROR! Unable to open camera\n";
+		return -1;
+	}
+
+	std::cout << "Start grabbing" << std::endl << "Press any key to terminate" << std::endl;
+	for (;;)
+	{
+		cap.read(frame);
+		if (frame.empty())
+		{
+			std::cerr << "ERROR! blank frame grabbed\n";
+			break;
+		}
+
+		cv::imshow("Live", frame);
+		if (cv::waitKey(5) >= 0)
+			break;
+	}
+
+	return 0;
 }
-
-// プログラムの実行: Ctrl + F5 または [デバッグ] > [デバッグなしで開始] メニュー
-// プログラムのデバッグ: F5 または [デバッグ] > [デバッグの開始] メニュー
-
-// 作業を開始するためのヒント: 
-//    1. ソリューション エクスプローラー ウィンドウを使用してファイルを追加/管理します 
-//   2. チーム エクスプローラー ウィンドウを使用してソース管理に接続します
-//   3. 出力ウィンドウを使用して、ビルド出力とその他のメッセージを表示します
-//   4. エラー一覧ウィンドウを使用してエラーを表示します
-//   5. [プロジェクト] > [新しい項目の追加] と移動して新しいコード ファイルを作成するか、[プロジェクト] > [既存の項目の追加] と移動して既存のコード ファイルをプロジェクトに追加します
-//   6. 後ほどこのプロジェクトを再び開く場合、[ファイル] > [開く] > [プロジェクト] と移動して .sln ファイルを選択します

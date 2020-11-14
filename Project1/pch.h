@@ -1,12 +1,15 @@
-﻿// pch.h: プリコンパイル済みヘッダー ファイルです。
-// 次のファイルは、その後のビルドのビルド パフォーマンスを向上させるため 1 回だけコンパイルされます。
-// コード補完や多くのコード参照機能などの IntelliSense パフォーマンスにも影響します。
-// ただし、ここに一覧表示されているファイルは、ビルド間でいずれかが更新されると、すべてが再コンパイルされます。
-// 頻繁に更新するファイルをここに追加しないでください。追加すると、パフォーマンス上の利点がなくなります。
+﻿// ----------------------------------------------------------------------------
+// pch.h
+// ----------------------------------------------------------------------------
+#pragma once
 
-#ifndef PCH_H
-#define PCH_H
+#include <iostream>
+#include <stdio.h>
 
-// プリコンパイルするヘッダーをここに追加します
-
-#endif //PCH_H
+#pragma warning(push)
+#pragma warning(disable:6201)
+#pragma warning(disable:6294)
+#include <opencv2/core.hpp>
+#include <opencv2/videoio.hpp>
+#include <opencv2/highgui.hpp>
+#pragma warning(pop)

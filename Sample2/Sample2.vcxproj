@@ -45,6 +45,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -56,6 +58,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)packages\opencv4.2.2020.5.26\build\native\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -64,7 +67,7 @@
       <AdditionalDependencies>opencv_world420d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>COPY $(SolutionDir)packages\opencv4.2.2020.5.26\build\native\x64\vc15\bin\opencv_world420d.* $(OutDir) /Y</Command>
+      <Command>COPY "$(SolutionDir)packages\opencv4.2.2020.5.26\build\native\x64\vc15\bin\opencv_world420d.*" "$(OutDir)" /Y</Command>
       <Message>copy "opencv_world420d.dll" to the execute stage.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -87,17 +90,17 @@
       <AdditionalDependencies>opencv_world420.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>COPY $(SolutionDir)packages\opencv4.2.2020.5.26\build\native\x64\vc15\bin\opencv_world420.* $(OutDir) /Y</Command>
+      <Command>COPY "$(SolutionDir)packages\opencv4.2.2020.5.26\build\native\x64\vc15\bin\opencv_world420.*" "$(OutDir)" /Y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>copy "opencv_world420.dll" to the execute stage.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Sample2.cpp" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ClCompile Include="Sample2.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
