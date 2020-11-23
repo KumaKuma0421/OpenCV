@@ -220,3 +220,10 @@ foreach ($file in $fileList) {
 |warpPerspective_demo|[warpPerspective_demo.cpp](https://github.com/opencv/opencv/blob/master/samples/cpp/warpPerspective_demo.cpp)|
 |watershed|[watershed.cpp](https://github.com/opencv/opencv/blob/master/samples/cpp/watershed.cpp)|
 
+# OpenCV関数の使われ具合
+
+OpenCVの関数、定数がどのファイルでどれが使われているのかを調べてみました。まだ不完全ではありますが、取り急ぎ公開します。間違いなどがあれば御一報頂けますと幸いであります。
+
+[Sampleに含まれるOpenCV関数一覧](https://docs.google.com/spreadsheets/d/1nylXmS-MBsZRIBuxX3XGw0boR-BMMy4rQy55529bzW4/edit?usp=sharing)
+https://docs.google.com/spreadsheets/d/1nylXmS-MBsZRIBuxX3XGw0boR-BMMy4rQy55529bzW4/edit?usp=sharing
+
